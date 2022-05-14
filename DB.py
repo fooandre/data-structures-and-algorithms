@@ -3,82 +3,69 @@
 # Admin Number: 210119U
 # Tut Group: IT2153-07
 
+from Record import Record
+
+
 class DB:
     # region Attributes
-    __records = [
-        {
-            "customer": "sam",
-            "package": "basic",
-            "pax": 2,
-            "cost_per_pax": 300
-        },
-        {
-            "customer": "alex",
-            "package": "premium",
-            "pax": 5,
-            "cost_per_pax": 750
-        },
-        {
-            "customer": "xing jie",
-            "package": "premium luxury",
-            "pax": 1,
-            "cost_per_pax": 1200
-        }
-    ]
-
-    n = len(__records)
+    __records = []
     #endregion
 
-    # region Basic Methods
-    def get_all(self): return [record for record in self.__records]
-
-    def display_all(self): [print(f"{self.__records.index(record) + 1} | {str(record)}") for record in self.__records]
-    # endregion
-
     # region DB Methods
-    def add(self, record): self.__records.append(record)
-    
-    def remove(self, record): self.__records.remove(record)
+    def get_all(self): return self.__records
+    def display_all(self): [print(f"{self.get_all().index(record) + 1} | {record}") for record in self.get_all()]
+
+    def add(self, *args, customer, package, pax, cost_per_pax): self.get_all().append(Record(customer=customer, package=package, pax=pax, cost_per_pax=cost_per_pax))
+    def remove(self, record): self.get_all().remove(record)
     # endregion
 
     # region Sorting
     def bubble(self):
-        for i in range(self.n - 1, 0, -1):
+        data = self.get_all()
+        n = len(data)
+
+        for i in range(n - 1, 0, -1):
             for j in range(i):
-                if self.__records[j]["customer"] > self.__records[j + 1]["customer"]:
-                    tmp = self.__records[j]
-                    self.__records[j] = self.__records[j + 1]
-                    self.__records[j + 1] = tmp
+                if data[j].get_customer() > data[j + 1].get_customer():
+                    tmp = data[j]
+                    data[j] = data[j + 1]
+                    data[j + 1] = tmp
+
         self.on_sort_finish()
         return True
 
     def selection(self):
-        for i in range(self.n - 1):
+        data = self.get_all()
+        n = len(data)
+
+        for i in range(n - 1):
             smallNdx = i
 
-            for j in range(i + 1, self.n):
-                if self.__records[j]["package"] < self.__records[smallNdx]["package"]:
-                    smallNdx = j
+            for j in range(i + 1, n):
+                if data[j].get_package() < data[smallNdx].get_package(): smallNdx = j
 
-            if smallNdx != i:
-                tmp = self.__records[i]
-                self.__records[i] = self.__records[smallNdx]
-                self.__records[smallNdx] = tmp
+            tmp = data[i]
+            data[i] = data[smallNdx]
+            data[smallNdx] = tmp
+            
         self.on_sort_finish()
         return True
 
     def insertion(self):
-        for cpp in range(1, self.n):
-            while True:
-                value = self.__records[cpp]
-                pos = cpp
+        data = self.get_all()
+        n = len(data)
 
-                if pos <= 0 or value["cost_per_pax"] >= self.__records[pos - 1]["cost_per_pax"]:
+        for i in range(1, n):
+            while True:
+                value = data[i]
+                pos = i
+
+                if pos <= 0 or value.get_cost_per_pax() >= data[pos - 1].get_cost_per_pax():
                     break
 
-                self.__records[pos] = self.__records[pos-1]
+                data[pos] = data[pos-1]
                 pos -= 1
-                self.__records[pos] = value
+                data[pos] = value
         self.on_sort_finish()
         return True
 
@@ -96,55 +83,44 @@ class DB:
 
     # region Searching
     def linear(self):
-        try:
-            search = input("Enter search key: ").lower()
+        search = input("Enter search key: ").lower()
 
-            res = [record for record in self.__records if record["customer"].lower()
-                   == search]
+        res = [record for record in self.get_all() if record.get_customer()
+                == search]
 
-            if len(res) == 0:
-                print("Customer not found")
-                return False
-
-            print(f"All records for {search[0].upper() + search[1:]} found")
-            [print(f"{res.index(record) + 1} | {record['customer']} bought {record['package']} for ${record['cost_per_pax']}/pax for {record['pax']}") for record in res]
-            return res
-        except Exception as err:
-            print(err)
+        if len(res) == 0:
+            print("Customer not found")
             return False
+
+        [print(f"{res.index(record) + 1} | {record}") for record in res]
+        return res
 
     def binary(self):
-        try:
-            search = input("Enter search key: ").lower()
+        search = input("Enter search key: ").lower()
 
-            start = 0
-            end = self.n - 1
+        data = self.get_all()
+        start = 0
+        end = len(data) - 1
 
-            while True:
-                midpoint = (end + start) // 2
-                pointer = self.data[midpoint]["package"]
+        while True:
+            midpoint = (end + start) // 2
+            pointer = data[midpoint].get_package()
 
-                if end < start:
-                    print(search, "not found in records")
-                    break
+            if end < start:
+                break
 
-                if pointer == search:
-                    print(search, "found")
-                    res = self.data[midpoint]
-                    print(
-                        f"{self.data.index(res) + 1} | {res['customer']} bought {res['package']} for ${res['cost_per_pax']}/pax for {res['pax']}")
-                    return res
+            if pointer == search:
+                res = data[midpoint]
+                print(f"{data.index(res) + 1} | {res}")
+                return res
 
-                if pointer > search:
-                    end = midpoint - 1
-                    continue
+            if pointer > search:
+                end = midpoint - 1
+                continue
 
-                start = midpoint + 1
-            print(search, "not found")
-            return False
-        except Exception as err:
-            print(err)
-            return False
+            start = midpoint + 1
+
+        print(search, "not found")
 
     def try_search(self, func):
         try:

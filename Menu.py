@@ -5,34 +5,33 @@
 
 from DB import DB
 
+db = DB()
 
 class Menu:
-    db = DB()
-
     __functions = [
         {
             "title": "display records",
-            "function": lambda self: self.db.display_all()
+            "function": lambda: db.display_all()
         },
         {
             "title": "sort records by customer name",
-            "function": lambda self: self.db.try_sort(self.db.bubble)
+            "function": lambda: db.try_sort(db.bubble)
         },
         {
             "title": "sort records by package",
-            "function": lambda self: self.db.try_sort(self.db.selection)
+            "function": lambda: db.try_sort(db.selection)
         },
         {
             "title": "sort records by cost",
-            "function": lambda self: self.db.try_sort(self.db.insertion)
+            "function": lambda: db.try_sort(db.insertion)
         },
         {
             "title": "search records for customer",
-            "function": lambda self: self.db.try_search(self.db.linear)
+            "function": lambda: db.try_search(db.linear)
         },
         {
             "title": "search records for package",
-            "function": lambda self: self.db.try_search(self.db.binary)
+            "function": lambda: db.try_search(db.binary)
         },
         {
             "title": "list records by cost range",
@@ -45,4 +44,4 @@ class Menu:
         [print(f"{self.__functions.index(func) + 1}) {func['title']}") for func in self.__functions]
         print()
 
-    def call_func(self, option): self.__functions[option - 1]["function"](self)
+    def call_func(self, option): self.__functions[option - 1]["function"]()
