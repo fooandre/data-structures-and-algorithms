@@ -25,7 +25,7 @@ if __name__ == "__main__":
     while True:
         menu.display()
 
-        res = input("Select an option: ").strip().lower()
+        res = input("Select an option or press \"enter\" to quit: ").strip().lower()
 
         if (res == ''):
             print("Exiting program...")

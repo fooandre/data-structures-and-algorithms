@@ -44,21 +44,22 @@ class Record:
                     if new_value == '': break
 
                     if not new_value.isnumeric():
-                        print("Value must be numeric, please try again or press \"enter\" to cancel!\n")
+                        print("Value must be integer, please try again or press \"enter\" to cancel!\n")
                         continue
                     
-                    self.__pax = new_value
+                    self.__pax = int(new_value)
                     break
             elif to_edit == '4':
                 while True:
                     new_value = input("Enter new cost per pax or press \"enter\" to cancel: ")
                     if new_value == '': break
 
-                    if not new_value.isnumeric():
+                    try:
+                        new_value = float(new_value)
+                        self.__cost_per_pax = new_value
+                        break
+                    except:
                         print("Value must be numeric, please try again or press \"enter\" to cancel!\n")
                         continue
-                    
-                    self.__cost_per_pax = new_value
-                    break
             else:
                 print("That was not one of the options, please try again or press \"enter\" to cancel")
