@@ -1,4 +1,4 @@
-# About the author
+# Author
 # Name: Andre Foo
 # Admin Number: 210119U
 # Tut Group: IT2153-07
@@ -10,32 +10,36 @@ db = DB()
 class Menu:
     __functions = [
         {
-            "title": "display records",
+            "title": "Display records",
             "function": lambda: db.display_all()
         },
         {
-            "title": "sort records by customer name",
+            "title": "Sort records by customer name",
             "function": lambda: db.try_sort(db.bubble)
         },
         {
-            "title": "sort records by package",
+            "title": "Sort records by package",
             "function": lambda: db.try_sort(db.selection)
         },
         {
-            "title": "sort records by cost",
+            "title": "Sort records by cost",
             "function": lambda: db.try_sort(db.insertion)
         },
         {
-            "title": "search records for customer",
+            "title": "Sort records by no of pax",
+            "function": lambda: db.try_sort(db.counting)
+        },
+        {
+            "title": "Search records for customer",
             "function": lambda: db.try_search(db.linear)
         },
         {
-            "title": "search records for package",
+            "title": "Search records for package",
             "function": lambda: db.try_search(db.binary)
         },
         {
-            "title": "list records by cost range",
-            "function": None
+            "title": "List records by cost range",
+            "function": lambda: db.find_in_range()
         }
     ]
 
